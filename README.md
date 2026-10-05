@@ -47,12 +47,30 @@ idcard-app/
 
 ### 2. Setup
 
-1. Clone repository dari GitHub ke folder web server Anda, misalnya:
+#### Prasyarat Sistem:
+- PHP 7.4+ dengan ekstensi `mysqli`
+- MySQL / MariaDB Server
+- Web server: Apache2
+
+#### Langkah-langkah Instalasi (Ubuntu/Debian):
+
+1. **Update system dan install dependencies:**
+   ```bash
+   sudo apt update
+   sudo apt install -y apache2 php php-mysqli mariadb-server git
    ```
-   git clone https://github.com/Deri-Nugroho/appIDcard.git /var/www/html/idcard-app/
+
+2. **Clone repository dari GitHub ke folder web server:**
+   ```bash
+   sudo git clone https://github.com/Deri-Nugroho/appIDcard.git /var/www/html/idcard-app/
    cd /var/www/html/idcard-app/
    ```
-2. Buka file **`konfig.php`**, sesuaikan kredensial database:
+
+3. **Buka file `konfig.php`, sesuaikan kredensial database:**
+   ```bash
+   sudo nano konfig.php
+   ```
+   Edit bagian konfigurasi database:
    ```php
    define('DB_HOST', 'localhost');
    define('DB_PORT', '3306');
@@ -64,43 +82,114 @@ idcard-app/
    > Anda **tidak perlu** membuat database/tabel secara manual — aplikasi
    > akan membuatnya otomatis saat pertama kali diakses/menyimpan data.
 
-3. Akses dari browser HP/desktop yang satu jaringan:
-   ```
-   http://<IP-KOMPUTER-ANDA>:8000
+4. **Set permission folder:**
+   ```bash
+   sudo chown -R www-data:www-data /var/www/html/idcard-app
+   sudo chmod -R 755 /var/www/html/idcard-app
    ```
 
-   Atau taruh di folder `htdocs` (XAMPP/Laragon) lalu akses via:
+5. **Restart Apache:**
+   ```bash
+   sudo systemctl restart apache2
+   ```
+
+6. **Akses aplikasi dari browser:**
    ```
    http://localhost/idcard-app
+   ```
+   Atau dari device lain di jaringan yang sama:
+   ```
+   http://<IP-KOMPUTER-ANDA>/idcard-app
    ```
 
 ### 2b. Setup dengan Docker Compose
 
-1. Clone repository:
+#### Prasyarat Sistem:
+- Docker Engine terinstall
+- Docker Compose terinstall
+
+#### Langkah-langkah Instalasi Docker (Ubuntu/Debian):
+
+1. **Install Docker:**
+   ```bash
+   sudo apt update
+   sudo apt install -y docker.io docker-compose
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   sudo usermod -aG docker $USER
    ```
+   > Logout dan login kembali agar group docker aktif
+
+2. **Verifikasi instalasi Docker:**
+   ```bash
+   docker --version
+   docker-compose --version
+   ```
+
+#### Langkah-langkah Deploy Aplikasi:
+
+1. **Clone repository:**
+   ```bash
    git clone https://github.com/Deri-Nugroho/appIDcard.git
    cd appIDcard
    ```
 
-2. Build dan jalankan containers:
+2. **Cek apakah port 8080 sudah digunakan:**
+   ```bash
+   sudo lsof -i :8080
    ```
+   Jika port 8080 sudah digunakan, edit `docker-compose.yml` dan ubah port mapping:
+   ```yaml
+   ports:
+     - "8081:80"  # atau port lain yang tersedia
+   ```
+
+3. **Build dan jalankan containers:**
+   ```bash
    docker-compose up -d --build
    ```
 
-3. Akses aplikasi di browser:
-   ```
-   http://localhost:8080
-   ```
-
-4. Untuk menghentikan containers:
-   ```
-   docker-compose down
+4. **Cek status containers:**
+   ```bash
+   docker-compose ps
    ```
 
-   Untuk menghentikan dan menghapus volumes database:
+5. **Lihat logs jika ada error:**
+   ```bash
+   docker-compose logs webserver
+   docker-compose logs dbserver
    ```
-   docker-compose down -v
+
+6. **Akses aplikasi di browser:**
    ```
+   http://localhost:8081
+   ```
+   Atau dari device lain di jaringan yang sama:
+   ```
+   http://<IP-KOMPUTER-ANDA>:8081
+   ```
+
+7. **Perintah manajemen Docker Compose:**
+   - Stop containers:
+     ```bash
+     docker-compose stop
+     ```
+   - Start containers:
+     ```bash
+     docker-compose start
+     ```
+   - Hentikan dan hapus containers:
+     ```bash
+     docker-compose down
+     ```
+   - Hentikan dan hapus containers beserta volumes database:
+     ```bash
+     docker-compose down -v
+     ```
+   - Rebuild containers:
+     ```bash
+     docker-compose up -d --build
+     ```
 
 ### 3. Cara Pakai
 
