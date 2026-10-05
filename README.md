@@ -82,13 +82,56 @@ idcard-app/
    > Anda **tidak perlu** membuat database/tabel secara manual — aplikasi
    > akan membuatnya otomatis saat pertama kali diakses/menyimpan data.
 
-4. **Set permission folder:**
+4. **Setup dan konfigurasi MariaDB:**
+   ```bash
+   # Start MariaDB service
+   sudo systemctl start mariadb
+   sudo systemctl enable mariadb
+
+   # Secure MariaDB installation (set password root, dll)
+   sudo mysql_secure_installation
+   ```
+   Saat diminta:
+   - Set root password? **Y** (masukkan password yang aman)
+   - Remove anonymous users? **Y**
+   - Disallow root login remotely? **Y** (opsional, untuk development bisa N)
+   - Remove test database? **Y**
+   - Reload privilege tables now? **Y**
+
+   Atau untuk setup cepat tanpa mysql_secure_installation:
+   ```bash
+   sudo mysql
+   ```
+   Lalu jalankan perintah SQL berikut:
+   ```sql
+   ALTER USER 'root'@'localhost' IDENTIFIED BY 'password_aman_anda';
+   FLUSH PRIVILEGES;
+   EXIT;
+   ```
+
+5. **Buka file `konfig.php`, sesuaikan kredensial database:**
+   ```bash
+   sudo nano konfig.php
+   ```
+   Edit bagian konfigurasi database sesuai password yang sudah diset:
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_PORT', '3306');
+   define('DB_USER', 'root');
+   define('DB_PASS', 'password_aman_anda');  // Ganti dengan password yang diset
+   define('DB_NAME', 'db_idcard');
+   define('DB_TABLE', 'biodata');
+   ```
+   > Anda **tidak perlu** membuat database/tabel secara manual — aplikasi
+   > akan membuatnya otomatis saat pertama kali diakses/menyimpan data.
+
+6. **Set permission folder:**
    ```bash
    sudo chown -R www-data:www-data /var/www/html/idcard-app
    sudo chmod -R 755 /var/www/html/idcard-app
    ```
 
-5. **Restart Apache:**
+7. **Restart Apache:**
    ```bash
    sudo systemctl restart apache2
    ```
