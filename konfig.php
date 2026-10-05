@@ -9,11 +9,12 @@
  */
 
 // ---------- KONFIGURASI DATABASE ----------
-define('DB_HOST', 'localhost');      // Host MySQL, mis: localhost atau IP RDS
-define('DB_PORT', '3306');           // Port MySQL
-define('DB_USER', 'root');           // Username MySQL
-define('DB_PASS', '');               // Password MySQL
-define('DB_NAME', 'db_idcard');      // Nama database (akan dibuat otomatis jika belum ada)
+// Support environment variables for Docker deployment
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');      // Host MySQL, mis: localhost atau IP RDS
+define('DB_PORT', getenv('DB_PORT') ?: '3306');           // Port MySQL
+define('DB_USER', getenv('DB_USER') ?: 'root');           // Username MySQL
+define('DB_PASS', getenv('DB_PASS') ?: '');               // Password MySQL
+define('DB_NAME', getenv('DB_NAME') ?: 'db_idcard');      // Nama database (akan dibuat otomatis jika belum ada)
 define('DB_TABLE', 'biodata');       // Nama tabel (akan dibuat otomatis jika belum ada)
 
 // ---------- INFO ENVIRONMENT AWS ----------
