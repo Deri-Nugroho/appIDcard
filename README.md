@@ -47,9 +47,10 @@ idcard-app/
 
 ### 2. Setup
 
-1. Extract file zip ke folder web server Anda, misalnya:
+1. Clone repository dari GitHub ke folder web server Anda, misalnya:
    ```
-   /var/www/html/idcard-app/
+   git clone https://github.com/Deri-Nugroho/appIDcard.git /var/www/html/idcard-app/
+   cd /var/www/html/idcard-app/
    ```
 2. Buka file **`konfig.php`**, sesuaikan kredensial database:
    ```php
@@ -71,6 +72,34 @@ idcard-app/
    Atau taruh di folder `htdocs` (XAMPP/Laragon) lalu akses via:
    ```
    http://localhost/idcard-app
+   ```
+
+### 2b. Setup dengan Docker Compose
+
+1. Clone repository:
+   ```
+   git clone https://github.com/Deri-Nugroho/appIDcard.git
+   cd appIDcard
+   ```
+
+2. Build dan jalankan containers:
+   ```
+   docker-compose up -d --build
+   ```
+
+3. Akses aplikasi di browser:
+   ```
+   http://localhost:8080
+   ```
+
+4. Untuk menghentikan containers:
+   ```
+   docker-compose down
+   ```
+
+   Untuk menghentikan dan menghapus volumes database:
+   ```
+   docker-compose down -v
    ```
 
 ### 3. Cara Pakai
